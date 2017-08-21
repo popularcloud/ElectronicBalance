@@ -1,0 +1,33 @@
+package com.dlc.electronicbalance.net;
+
+import android.support.annotation.Nullable;
+
+import com.dlc.electronicbalance.bean.UserInfoBean;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import io.reactivex.Observable;
+
+/**
+ * Created by YoungeTao on 2017/8/19
+ * QQ 2276559259.
+ * gmail youngetao@gmail.com
+ */
+
+public class MyRequestUtils extends HttpUtil{
+
+    /**
+     * 登录
+     * @param type
+     * @param password
+     * @return
+     */
+    public Observable<UserInfoBean> login(String type,String password) {
+        Map<String,String> httpParams = new HashMap<>();
+        httpParams.put("api_name", "login");
+        httpParams.put("in_text", password);
+        httpParams.put("type", type);
+        return rxPost("goods", httpParams, UserInfoBean.class,"",null);
+    }
+}

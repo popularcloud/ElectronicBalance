@@ -1,0 +1,11 @@
+package com.dlc.electronicbalance.database;
+
+import android.content.Context;
+
+public class DaoManager {
+    public DaoManager(){
+
+    }
+
+
+}

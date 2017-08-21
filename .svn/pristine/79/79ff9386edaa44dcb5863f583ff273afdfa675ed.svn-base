@@ -1,0 +1,94 @@
+package com.dlc.electronicbalance.net;
+
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.dlc.electronicbalance.base.Constants;
+import com.dlc.electronicbalance.net.exception.ErrorMsgException;
+import com.dlc.electronicbalance.utils.GsonUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.zhy.http.okhttp.OkHttpUtils;
+
+import org.json.JSONObject;
+
+import java.util.Map;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
+import io.reactivex.Observer;
+import okhttp3.Response;
+
+/**
+ * Created by John on 2017/6/12.
+ */
+
+public class HttpUtil {
+
+    public static final Gson GSON = new GsonBuilder().serializeNulls().create();
+    //private static final StringConvert CONVERT = new StringConvert();
+
+    public interface Callback<T> {
+
+        void onSuccess(T t);
+
+        void onFailed(int code, ErrorMsgException e);
+    }
+
+    public interface SimpleCallback {
+        void onResult(int code);
+    }
+
+    /**
+     * 同步请求返回文本
+     *
+     * @param url
+     * @param headers
+     * @param params
+     * @return
+     * @throws Throwable
+     */
+    private String syncPostText(String url, Map<String,String> headers, Map<String,String> params)
+            throws Throwable {
+        Response response = OkHttpUtils.post().url(url).headers(headers).params(params).build().execute();
+        return response.body().string();
+    }
+
+
+
+    public  <T> Observable<T> rxPost(
+                                     @Nullable final Map<String,String> params, final Class<T> clazz, final String errorString, final Map<String,String> headers) {
+        return Observable.unsafeCreate(new ObservableSource<T>() {
+            @Override
+            public void subscribe(Observer<? super T> observer) {
+                try {
+                    String text = syncPostText(Constants.baseUrl, headers, params);
+
+                    Log.e("TAG","response=" + text);
+
+                    JSONObject jsonObject = new JSONObject(text);
+                    int code = jsonObject.getInt("code");
+                    String msg = jsonObject.getString("msg");
+
+                   // LogPlus.w("code=" + code + ",msg=" + msg);
+                    Log.e("TAG","code=" + code + ",msg=" + msg);
+
+                    if (code == 1) {
+                        T result = GsonUtil.gsonToBean(text, clazz);
+                        observer.onNext(result);
+                        observer.onComplete();
+                    } else {
+                        String error = TextUtils.isEmpty(errorString) ? msg : errorString;
+                        error = TextUtils.isEmpty(error) ? "未知异常"
+                                : error;
+                        observer.onError(new Throwable(error));
+                    }
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                    observer.onError(throwable);
+                }
+            }
+        });
+    }
+}

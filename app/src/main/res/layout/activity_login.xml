@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <include layout="@layout/include_actionbar_01" />
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="@dimen/normal_652dp"
+        android:layout_height="@dimen/normal_120dp"
+        android:background="@drawable/circular_green_line"
+        android:layout_centerInParent="true"
+        />
+    <TextView
+        android:id="@+id/et_notice"
+        android:layout_marginBottom="@dimen/normal_54dp"
+        android:layout_above="@id/et_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/normal_54sp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/please_input_password"/>
+</RelativeLayout>

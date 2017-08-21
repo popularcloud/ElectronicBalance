@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1f4e5f</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="dark">#5e5656</color>
+    <color name="divider">#ffd2d2d2</color>
+    <color name="color_333">#333333</color>
+    <color name="color_666">#666</color>
+    <color name="color_999">#999</color>
+    <color name="line_bg">#dadada</color>
+    <color name="transparent">#00000000</color>
+    <color name="blue">#0000ff</color><!--蓝色 -->
+    <color name="white">#ffffff</color><!--白色 -->
+    <color name="default_on_pressed">#22aaaaaa</color>
+    <color name="default_on_pressed_no_alpha">#F4F4F4</color>
+    <color name="small_green">#aacfd0</color>
+    <color name="main_bg">#f0f5f9</color>
+</resources>

@@ -1,0 +1,225 @@
+package com.dlc.electronicbalance.base;
+
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.LayoutRes;
+import android.support.v4.view.ViewCompat;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.ImageButton;
+
+import com.dlc.electronicbalance.R;
+import com.dlc.electronicbalance.activity.MainActivity;
+import com.dlc.electronicbalance.utils.ToastUtil;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
+
+/**
+ * Created by GaoYuan on 2017/5/17.
+ */
+
+public abstract class BaseActivity extends RxAppCompatActivity {
+
+    private Unbinder mUnbinder;
+    protected Context mContext;
+    private ImageButton back;
+    private ImageButton main;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mContext = this;
+        beforeSetContentView();
+        if (getLayoutID() != 0) {// 子类设置布局id使用,
+            setContentView(getLayoutID());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                setStatusBarUpperAPI21(R.color.colorPrimary);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                setStatusBarUpperAPI19(R.color.colorPrimary);
+            }
+        }
+        //所有的ButterKnife绑定让父类完成
+        mUnbinder = ButterKnife.bind(this);
+        afterSetContentView(savedInstanceState);
+
+        initBackBtn();
+    }
+
+    public void initBackBtn(){
+        back = (ImageButton) findViewById(R.id.ib_back);
+        main = (ImageButton) findViewById(R.id.ib_main);
+        if(back != null){
+            back.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+        }
+        if(main != null){
+            main.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(MainActivity.class);
+                }
+            });
+        }
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        mUnbinder.unbind();//在页面销毁时解绑
+        super.onDestroy();
+    }
+
+    /**
+     * 获取布局xml的id.子类实现
+     *
+     * @return
+     */
+    @LayoutRes
+    protected abstract int getLayoutID();
+
+    /**
+     * 在设置布局前执行
+     */
+    protected void beforeSetContentView() {
+
+    }
+
+    /**
+     * 在设置布局后执行
+     *
+     * @param savedInstanceState
+     */
+    protected void afterSetContentView(Bundle savedInstanceState) {
+
+    }
+
+    protected Activity getActivity() {
+        return this;
+    }
+
+    /**
+     * 跳转到其他的activity,限定参数必须为Activity
+     */
+    public void startActivity(Class<? extends Activity> cls) {
+        Intent intent = new Intent(this, cls);
+        startActivity(intent);
+    }
+
+    public void startActivityForResult(Class<? extends Activity> cls, int requestCode) {
+        Intent intent = new Intent(this, cls);
+        startActivityForResult(intent, requestCode);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+    /*    if (hasFocus && Build.VERSION.SDK_INT >= 19) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }*/
+    }
+
+    // 5.0版本以上
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setStatusBarUpperAPI21(int color) {
+        Window window = getWindow();
+        //设置透明状态栏,这样才能让 ContentView 向上
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        //需要设置这个 flag 才能调用 setStatusBarColor 来设置状态栏颜色
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(getResources().getColor(color));
+        ViewGroup mContentView = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
+        View mChildView = mContentView.getChildAt(0);
+        if (mChildView != null) {
+            //注意不是设置 ContentView 的 FitsSystemWindows, 而是设置 ContentView 的第一个子 View . 使其不为系统 View 预留空间.
+            ViewCompat.setFitsSystemWindows(mChildView, false);
+        }
+    }
+
+    // 4.4 - 5.0版本
+    private void setStatusBarUpperAPI19(int color) {
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        ViewGroup mContentView = (ViewGroup) findViewById(Window.ID_ANDROID_CONTENT);
+        View statusBarView = mContentView.getChildAt(0);
+        int statusColor = getResources().getColor(color);
+        mContentView.setBackgroundColor(statusColor);
+        //移除假的 View
+        if (statusBarView != null && statusBarView.getLayoutParams() != null &&
+                statusBarView.getLayoutParams().height == getStatusBarHeight()) {
+            mContentView.removeView(statusBarView);
+        }
+
+        //不预留空间
+        if (mContentView.getChildAt(0) != null) {
+            ViewCompat.setFitsSystemWindows(mContentView.getChildAt(0), false);
+        }
+    }
+
+    private int getStatusBarHeight(){
+        int result = 0;
+        int resId = getResources().getIdentifier("status_bar_height","dimen","android");
+        if(resId>0){
+            result = getResources().getDimensionPixelSize(resId);
+        }
+        return result;
+    }
+
+    /**
+     * 显示Toast
+     *
+     * @param resid
+     */
+    public void showToast(int resid) {
+        ToastUtil.show(this, resid);
+    }
+
+    /**
+     * 显示Toast
+     *
+     * @param text
+     */
+    public void showToast(String text) {
+        ToastUtil.show(this, text);
+    }
+
+    /**
+     * 显示同一个Toast
+     *
+     * @param resid
+     */
+    public void showOneToast(int resid) {
+        ToastUtil.showOne(this, resid);
+    }
+
+    /**
+     * 显示同一个Toast
+     *
+     * @param text
+     */
+    public void showOneToast(String text) {
+        ToastUtil.showOne(this, text);
+    }
+}

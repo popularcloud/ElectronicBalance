@@ -1,0 +1,74 @@
+package com.dlc.electronicbalance.activity;
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
+
+import com.dlc.electronicbalance.R;
+import com.dlc.electronicbalance.base.BaseActivity;
+
+import butterknife.BindView;
+
+public class LoginActivity extends BaseActivity {
+
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
+    @BindView(R.id.ib_main)
+    ImageButton ibMain;
+    @BindView(R.id.et_search)
+    EditText etSearch;
+    @BindView(R.id.tv_date)
+    TextView tvDate;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
+    @BindView(R.id.et_password)
+    EditText etPassword;
+    @BindView(R.id.et_notice)
+    TextView etNotice;
+
+    @Override
+    protected int getLayoutID() {
+        return R.layout.activity_login;
+    }
+
+    @Override
+    protected void afterSetContentView(Bundle savedInstanceState) {
+        super.afterSetContentView(savedInstanceState);
+
+        initTitleBar();
+        initView();
+    }
+
+    private void initView() {
+        etPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(!TextUtils.isEmpty(s) && "123".equals(s.toString())){
+                    startActivity(MainActivity.class);
+                    s.clear();
+                }
+            }
+        });
+    }
+
+    private void initTitleBar() {
+        ibBack.setVisibility(View.INVISIBLE);
+        ibMain.setVisibility(View.INVISIBLE);
+        etSearch.setVisibility(View.INVISIBLE);
+    }
+}

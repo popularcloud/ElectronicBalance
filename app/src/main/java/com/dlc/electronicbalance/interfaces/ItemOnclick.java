@@ -1,0 +1,10 @@
+package com.dlc.electronicbalance.interfaces;
+
+import android.view.View;
+
+/**
+ * recycleview item点击
+ */
+public interface ItemOnclick {
+        void onClick(View view, Object id);
+    }

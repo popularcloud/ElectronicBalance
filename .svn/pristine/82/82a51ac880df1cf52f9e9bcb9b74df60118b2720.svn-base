@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/normal_100dp"
+    android:layout_gravity="center"
+    android:gravity="center">
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="分类1-10"
+        android:clickable="true"
+        android:focusable="true"
+        android:textSize="@dimen/normal_24sp"
+        android:textColor="@drawable/tag_text_color"
+        android:background="@drawable/tag_selector_green"
+        android:paddingTop="@dimen/normal_5dp"
+        android:paddingBottom="@dimen/normal_5dp"
+        android:paddingLeft="@dimen/normal_15dp"
+        android:paddingRight="@dimen/normal_15dp"
+        android:gravity="center"/>
+</LinearLayout>

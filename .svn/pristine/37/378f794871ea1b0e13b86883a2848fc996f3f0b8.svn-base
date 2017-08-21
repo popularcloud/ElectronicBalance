@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_bg"
+    android:gravity="center_horizontal"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:padding="@dimen/normal_20dp">
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/normal_40sp"
+        android:layout_marginTop="@dimen/normal_38dp"
+        android:layout_centerHorizontal="true"
+        android:text="新增料品"/>
+    <Spinner
+        android:layout_width="750dp"
+        android:layout_height="@dimen/normal_80dp"
+        android:id="@+id/spinner01"
+        android:layout_marginTop="@dimen/normal_20dp"
+        android:background="@drawable/circular_green_line_small" />
+    <EditText
+        android:layout_width="750dp"
+        android:layout_height="@dimen/normal_80dp"
+        android:background="@drawable/circular_green_line_small"
+        android:hint="@string/please_input_present_release_data"
+        android:layout_marginTop="@dimen/normal_20dp"/>
+    <Spinner
+        android:layout_width="750dp"
+        android:layout_height="@dimen/normal_80dp"
+        android:id="@+id/spinner02"
+        android:layout_marginTop="@dimen/normal_20dp"
+        android:background="@drawable/circular_green_line_small" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/normal_28dp">
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="@dimen/normal_300dp"
+            android:layout_height="@dimen/normal_90dp"
+            android:text="@string/cancel"
+            android:background="@drawable/circular_green_line_small"
+            android:gravity="center"
+            android:padding="@dimen/normal_20dp"
+            android:textSize="@dimen/normal_40dp"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginLeft="@dimen/normal_20dp"
+            android:layout_marginRight="@dimen/normal_78dp" />
+        <TextView
+            android:id="@+id/tv_add"
+            android:layout_width="@dimen/normal_300dp"
+            android:layout_height="@dimen/normal_90dp"
+            android:text="@string/add"
+            android:background="@drawable/btn_selector_green"
+            android:gravity="center"
+            android:padding="@dimen/normal_20dp"
+            android:textSize="@dimen/normal_40dp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/normal_20dp"/>
+    </LinearLayout>
+
+</LinearLayout>
